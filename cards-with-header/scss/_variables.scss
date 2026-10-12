@@ -1,0 +1,111 @@
+//Colors
+
+$colorAccent1: rgb(230, 221, 237); //#E6DDED
+$colorAccent2: rgb(189, 134, 229); //#BD86E5
+$colorAccent3: rgb(156, 72, 216); //#9C48D8
+$colorAccent4: rgb(239, 224, 249); //#EFE0F9
+
+$colorHighlight1: rgb(154, 183, 113); //#9AB771
+
+$colorPrimary1: rgb(40, 52, 188); //#2834BC
+$colorPrimary2: rgb(208, 211, 245); //#D0D3F5
+$colorPrimary3: rgb(137, 143, 213); //#898FD5
+$colorPrimary4: rgb(97, 107, 221); //#616BDD
+$colorPrimary5: rgb(97, 108, 222); //#616CDE
+$colorPrimary6: rgb(38, 50, 181); //#2632B5
+$colorPrimary7: rgb(34, 45, 161); //#222DA1
+
+$colorSecondary1: rgb(127, 225, 217); //#7FE1D9
+$colorSecondary2: rgb(219, 242, 240); //#DBF2F0
+$colorSecondary3: rgb(141, 214, 208); //#8DD6D0
+$colorSecondary4: rgb(135, 230, 222); //#87E6DE
+$colorSecondary5: rgb(220, 247, 245); //#DCF7F5
+$colorSecondary6: rgb(233, 250, 249); //#E9FAF9
+$colorSecondary7: rgb(215, 246, 244); //#D7F6F4
+$colorSecondary8: rgb(156, 234, 227); //#9CEAE3
+$colorSecondary9: rgb(94, 221, 210); //#5EDDD2
+$colorSecondary10: rgb(220, 243, 241); //#DCF3F1
+$colorSecondary11: rgb(83, 185, 177); //#53B9B1
+$colorSecondary12: rgb(231, 250, 248); //#E7FAF8
+$colorSecondary13: rgb(128, 225, 217); //#80E1D9
+$colorSecondary14: rgb(194, 219, 217); //#C2DBD9
+$colorSecondary15: rgb(116, 226, 217); //#74E2D9
+$colorSecondary16: rgb(86, 219, 208); //#56DBD0
+
+$colorTertiary1: rgb(69, 92, 115); //#455C73
+$colorTertiary2: rgb(32, 43, 54); //#202B36
+$colorTertiary3: rgb(38, 50, 62); //#26323E
+$colorTertiary4: rgb(39, 51, 64); //#273340
+
+$colorBlack: rgb(0, 0, 0); //#000000
+$colorWhite: rgb(255, 255, 255); //#ffffff
+$colorTransparent: transparent;
+
+$colorGrey1: rgb(33, 39, 33); //#212721
+$colorGrey2: rgb(253, 249, 246); //#FDF9F6
+
+$colors: (
+        black: $colorBlack,
+        white: $colorWhite,
+        grey1: $colorGrey1,
+        grey2: $colorGrey2,
+        accent1: $colorAccent1,
+        accent2: $colorAccent2,
+        accent3: $colorAccent3,
+        accent4: $colorAccent4,
+        highlight1: $colorHighlight1,
+        primary1: $colorPrimary1,
+        primary2: $colorPrimary2,
+        primary3: $colorPrimary3,
+        primary4: $colorPrimary4,
+        primary5: $colorPrimary5,
+        primary6: $colorPrimary6,
+        primary7: $colorPrimary7,
+        secondary1: $colorSecondary1,
+        secondary2: $colorSecondary2,
+        secondary3: $colorSecondary3,
+        secondary4: $colorSecondary4,
+        secondary5: $colorSecondary5,
+        secondary6: $colorSecondary6,
+        secondary7: $colorSecondary7,
+        secondary8: $colorSecondary8,
+        secondary9: $colorSecondary9,
+        secondary10: $colorSecondary10,
+        secondary11: $colorSecondary11,
+        secondary12: $colorSecondary12,
+        secondary13: $colorSecondary13,
+        secondary14: $colorSecondary14,
+        secondary15: $colorSecondary15,
+        secondary16: $colorSecondary16,
+        tertiary1: $colorTertiary1,
+        tertiary2: $colorTertiary2,
+        tertiary3: $colorTertiary3,
+        tertiary4: $colorTertiary4,
+);
+
+//Fonts Families
+$primary-font: "Primary Sans", sans-serif;
+$secondary-font: "Secondary Serif", "Primary Sans", sans-serif;
+
+//Fonts Sizes
+$font-size-xss: 14;
+$font-size-xs: 16;
+$font-size-sm: 20;
+$font-size-md: 24;
+$font-size-lg: 28;
+$font-size-0xl: 32;
+$font-size-xl: 40;
+$font-size-2xl: 48;
+$font-size-3xl: 56;
+$font-size-4xl: 72;
+
+//Fonts Weights
+$font-weight-extra-light: 100;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+//Container Sizes
+$containerWidth: 1290px;

@@ -1,0 +1,24 @@
+{
+    "name": "cards-with-header",
+    "title": "Cards with header Block",
+    "description": "Custom ACF block",
+    "category": "layout",
+    "icon": "admin-generic",
+    "keywords": [
+        [
+            "cards",
+            "with",
+            "header"
+        ]
+    ],
+    "mode": "preview",
+    "align": "full",
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "anchor": true,
+        "jsx": false
+    }
+}

@@ -1,0 +1,94 @@
+@use "sass:map";
+
+// Breakpoint map
+
+$breakpoints: (
+        xxs: 360px, // Very small phones
+        xs: 480px, // Extra small devices (phones)
+        sm: 576px, // Small devices (phones)
+        md: 768px, // Medium devices (tablets)
+        lg: 1024px, // Large devices (laptops)
+        xl: 1280px, // Extra large devices (desktops)
+        xl2: 1536px, // Very large desktops
+        xl3: 1920px // Ultra-wide screens
+);
+
+// Flexible responsive mixin
+@mixin responsive($arg1, $arg2: null, $arg3: null, $arg4: null, $arg5: null) {
+  $media-query: "";
+  $prefix: "";
+  $min-width: null;
+  $max-width: null;
+  $orientation: null;
+
+  // Single argument: assume (max-width)
+  @if $arg2 == null {
+    $max-width: map.get($breakpoints, $arg1);
+  }
+
+    // min only
+  @else if $arg1 == min and $arg2 != null and $arg3 == null {
+    $min-width: map.get($breakpoints, $arg2);
+  }
+
+    // min and max
+  @else if $arg1 == min and $arg2 != null and $arg3 == max and $arg4 != null {
+    $min-width: map.get($breakpoints, $arg2);
+    $max-width: map.get($breakpoints, $arg4);
+  }
+
+    // min, max, and orientation
+  @else if $arg1 ==
+    min and
+    $arg2 !=
+    null and
+    $arg3 ==
+    max and
+    $arg4 !=
+    null and
+    $arg5 !=
+    null {
+    $min-width: map.get($breakpoints, $arg2);
+    $max-width: map.get($breakpoints, $arg4);
+    $orientation: $arg5;
+    $prefix: "only screen and ";
+  }
+
+  // Build media query string
+  @if $min-width != null {
+    $media-query: "#{$media-query}(min-width: #{$min-width})";
+  }
+
+  @if $max-width != null {
+    @if $media-query != "" {
+      $media-query: "#{$media-query} and ";
+    }
+    $media-query: "#{$media-query}(max-width: #{$max-width})";
+  }
+
+  @if $orientation != null {
+    $media-query: "#{$media-query} and (orientation: #{$orientation})";
+  }
+
+  // Prefix 'only screen and' if needed
+  @media #{$prefix}#{$media-query} {
+    @content;
+  }
+}
+
+//Examples
+//@include responsive(md) {
+//  font-size: 2rem;
+//}
+//
+//@include responsive(min, sm) {
+//  color: blue;
+//}
+//
+//@include responsive(min, sm, max, lg) {
+//  font-weight: bold;
+//}
+//
+//@include responsive(min, sm, max, xl, portrait) {
+//  font-style: italic;
+//}

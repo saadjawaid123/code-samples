@@ -1,0 +1,23 @@
+{
+    "name": "hero-slider",
+    "title": "Hero Slider Block",
+    "description": "Custom ACF block",
+    "category": "layout",
+    "icon": "admin-generic",
+    "keywords": [
+        [
+            "hero",
+            "slider"
+        ]
+    ],
+    "mode": "preview",
+    "align": "full",
+    "supports": {
+        "align": [
+            "full",
+            "wide"
+        ],
+        "anchor": true,
+        "jsx": false
+    }
+}

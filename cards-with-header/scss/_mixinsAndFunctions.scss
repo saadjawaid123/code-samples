@@ -1,0 +1,159 @@
+@use "sass:math";
+@use "sass:map";
+@use "sass:list";
+
+$browser-context: 16; // Default
+$opacityMax: 1; // Default
+$strokeDefault: 1; // Default
+
+@function rem($pixels, $context: $browser-context) {
+  @return #{math.div($pixels, $context)}rem;
+}
+
+@function clamped($min, $max, $map: $breakpoints) {
+  $keys:      map.keys($map);
+  $first-key: lg;
+  $last-key:  list.nth($keys, list.length($keys));
+
+  $min-vw: map.get($map, $first-key);
+  $max-vw: map.get($map, $last-key);
+
+  $diff:        $max - $min;
+  $min-vw-num:  math.div($min-vw, 1px);
+  $max-vw-num:  math.div($max-vw, 1px);
+  $vw-diff:     $max-vw-num - $min-vw-num;
+  $slope:       math.div($diff, $vw-diff);
+  $intercept:   $min - ($slope * $min-vw-num);
+
+  @return clamp(
+    #{$min}px,
+    #{$intercept}px + #{$slope * 100}vw,
+    #{$max}px
+  );
+}
+
+@function color($key, $alpha: null) {
+  $c: map.get($colors, $key);
+
+  @if $c == null {
+    @warn "Color `#{$key}` not found in $colors map.";
+    @return null;
+  }
+
+  @if $alpha != null {
+    @return rgba($c, $alpha);
+  } @else {
+    @return $c;
+  }
+}
+
+@function color-alpha($key, $alpha) {
+  $c: map.get($colors, $key);
+  @return rgba($c, $alpha);
+}
+
+@mixin scrollbar() {
+  & {
+    scrollbar-width: thin;
+    scrollbar-color: color(grey1) color(white);
+  }
+
+  &::-webkit-scrollbar {
+    width: rem(8);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: color(white);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: color(grey1);
+    border-radius: rem(7);
+    border: rem(3) none color(white);
+  }
+}
+
+@mixin font-size-line-height($font-size, $line-height: normal) {
+  font-size: rem($font-size);
+  @if $line-height == normal {
+    line-height: normal;
+  } @else {
+    line-height: rem($line-height);
+  }
+}
+
+@mixin basicTransition(
+  $duration: 0.5s,
+  $values: all,
+  $transition: ease-in-out
+) {
+  transition: $duration $values $transition;
+}
+
+// Slider dots: grow the tap target to 24×24 around a 10px dot without changing
+// how it looks. Transparent padding pads the box, the background is painted in
+// the content box only, and negative block margins keep the line box height
+// the same. Include AFTER any `background` shorthand (it resets clip/origin);
+// border-radius must be the original radius + $pad to keep the dot's curve.
+@mixin pagination-bullet-hit-area($pad: 7px) {
+  box-sizing: content-box;
+  padding: $pad;
+  margin-top: -$pad;
+  margin-bottom: -$pad;
+  @include pagination-bullet-paint;
+}
+
+@mixin pagination-bullet-paint {
+  background-clip: content-box;
+  background-origin: content-box;
+}
+
+@mixin icon-icomoon(
+  $content,
+  $font-size,
+  $font-weight: 400,
+  $font-style: normal
+) {
+  font-family: icomoon;
+  font-weight: $font-weight;
+  font-style: $font-style;
+  content: $content;
+  font-size: rem($font-size);
+}
+
+@mixin icomoon {
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin ul-init($margin: 0, $padding: 0, $list-style-type: none) {
+  margin: rem($margin);
+  padding: rem($padding);
+  list-style-type: $list-style-type;
+}
+
+@mixin img-init($fit: cover, $position: center, $width: 100%, $height: 100%) {
+  width: $width;
+  height: $height;
+  object-position: $position;
+  object-fit: $fit;
+}
+
+@mixin pseudoElement($width: 100%, $height: 100%, $content: "") {
+  content: $content;
+  width: $width;
+  height: $height;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}

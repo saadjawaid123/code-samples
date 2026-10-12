@@ -1,0 +1,269 @@
+@use "sass:list";
+
+// Hover gradient per blob colour — shared by desktop hover and mobile scroll.
+$chwh-blob-gradients: (
+        bg-accent1: (accent1, accent2),
+        bg-primary2: (primary2, primary3),
+        bg-primary6: (primary6, primary7),
+        bg-secondary1: (tertiary1, tertiary2),
+        bg-secondary2: (grey2, secondary14),
+        bg-secondary3: (secondary5, secondary3),
+        bg-secondary4: (secondary8, secondary9),
+        bg-secondary15: (secondary15, secondary16),
+);
+
+@mixin chwh-blob-gradient($colors) {
+  background: linear-gradient(135deg, color(list.nth($colors, 1), 1) 0%, color(list.nth($colors, 2), 1) 100%) !important;
+}
+
+// Mobile keyframes — the "to" state mirrors the hover state (md values). No
+// "from" keyframe, so each element starts from its own resting styles.
+@keyframes chwh-blob {
+  to {
+    height: clamped(391, 522);
+  }
+}
+
+@keyframes chwh-blob-gradient {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes chwh-logo {
+  to {
+    width: rem(150);
+    height: rem(140);
+    top: 23%;
+    left: clamped(36, 48);
+    transform: translateX(0%);
+  }
+}
+
+@keyframes chwh-image {
+  to {
+    height: clamped(240, 320);
+    top: rem(20);
+    left: 80%;
+    transform: translate(-55%, -5%) rotate(21.07deg);
+  }
+}
+
+@keyframes chwh-description {
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes chwh-cta {
+  to {
+    bottom: 7%;
+    opacity: 1;
+  }
+}
+
+.block-cards-with-header {
+  .card-item {
+    position: relative;
+    height: clamped(464, 618);
+    overflow: hidden;
+
+    .blob,
+    .card-logo,
+    .card-image,
+    .card-description,
+    .card-cta {
+      transition: all 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform, opacity, background, top, left, height; // Optimization for smoother movement
+    }
+
+    .blob {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      clip-path: url(#blob-shape);
+    }
+
+    .card-details {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      .card-logo {
+        position: absolute;
+        width: rem(120);
+        top: rem(40);
+        @include responsive(sm) {
+          width: rem(80);
+          top: rem(30);
+        }
+
+        // Center horizontally with auto width
+        left: 50%;
+        right: auto; // Reset right
+        transform: translateX(-50%);
+
+        //width: auto; // Now width will shrink-wrap the image
+        margin: 0; // Reset margin auto
+
+        img {
+          height: 100%;
+          width: auto; // Ensures the image defines the container width
+          @include img-init(contain);
+        }
+
+        &.large {
+          width: rem(200);
+          top: rem(60);
+        }
+
+      }
+
+      .card-image {
+        position: absolute;
+        height: clamped(431, 575);
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, 0) rotate(0deg);
+        width: 100%;
+
+        img {
+          @include img-init(contain);
+        }
+      }
+
+      .card-description {
+        position: absolute;
+        bottom: 23%;
+        left: -100%;
+        width: 100%;
+        padding: 0 clamped(36, 48);
+        opacity: 0;
+        font-size: clamped($font-size-xs, $font-size-sm);
+        @include responsive(md) {
+          font-size: clamped($font-size-xss, $font-size-xs);
+        }
+      }
+
+      .card-cta {
+        position: absolute;
+        bottom: -15%;
+        left: clamped(36, 48);
+        opacity: 0;
+      }
+
+      &.parent-bg-secondary1,
+      &.parent-bg-primary6 {
+        .card-description {
+          color: color(grey2) !important;
+        }
+      }
+    }
+
+    // Hover — desktop only; mobile is scroll-driven (see below)
+    @media (min-width: 769px) {
+      &:hover {
+        .blob {
+          height: clamped(391, 522);
+          top: unset;
+
+          @each $class, $colors in $chwh-blob-gradients {
+            &.#{$class} {
+              @include chwh-blob-gradient($colors);
+            }
+          }
+        }
+
+        .card-details {
+          .card-logo {
+            width: rem(150);
+            right: auto;
+            margin-left: 0;
+            top: 40%;
+            left: clamped(36, 48);
+            transform: translateX(0%);
+          }
+
+          .card-image {
+            height: clamped(240, 320);
+            top: rem(20);
+            left: 80%; // Slide to the right
+            transform: translate(-55%, -5%) rotate(21.07deg);
+          }
+
+          .card-description {
+            left: 0;
+            opacity: 1;
+          }
+
+          .card-cta {
+            bottom: 10%;
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  // Mobile — cards-with-header.js sets --chwh-p (0 → 1) per card from scroll
+  // position; a negative delay on a paused animation seeks to that progress.
+  &.is-scroll-driven .card-item {
+    .blob,
+    .blob::before,
+    .card-logo,
+    .card-image,
+    .card-description,
+    .card-cta {
+      transition: none;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+      animation-delay: calc(var(--chwh-p, 0) * -1s);
+    }
+
+    .blob {
+      animation-name: chwh-blob;
+      top: unset; // Keep the shrinking blob anchored to the bottom, as on hover
+
+      // Gradient fades in over the solid colour (backgrounds can't interpolate)
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        animation-name: chwh-blob-gradient;
+      }
+
+      @each $class, $colors in $chwh-blob-gradients {
+        &.#{$class}::before {
+          @include chwh-blob-gradient($colors);
+        }
+      }
+    }
+
+    .card-details {
+      .card-logo {
+        animation-name: chwh-logo;
+      }
+
+      .card-image {
+        animation-name: chwh-image;
+      }
+
+      .card-description {
+        animation-name: chwh-description;
+      }
+
+      .card-cta {
+        animation-name: chwh-cta;
+      }
+    }
+  }
+}
