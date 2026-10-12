@@ -1,55 +1,55 @@
 # Hero Slider (ACF block)
 
-A full-width hero slider for WordPress. Each slide is an image, an uploaded video, or a YouTube/Vimeo link.
+A full-width hero slider for WordPress. It's anonymized from a real client project and shared with permission. Client names, colours, fonts and assets have been replaced or removed.
 
-- Image slides advance on a timer.
-- Video slides play to the end before moving on.
-- Each video slide has a play/pause button.
-- With a single slide, the slider is skipped and the video just loops.
-- The first image loads eagerly with high priority (it is the likely LCP element). The rest are lazy-loaded.
-- The first slide has a one-time zoom-out, which is turned off under `prefers-reduced-motion`.
+## What it does
+
+Each slide can be an image, an uploaded video, or a YouTube or Vimeo link. Editors set slides up in ACF fields.
+
+- Image slides move on after a set delay.
+- Video slides pause the autoplay timer and move on when the video ends.
+- If the browser blocks autoplay, the slide falls back to the timer.
+- Uploaded videos get a play/pause button.
+- With only one slide, Swiper isn't started at all. The video just loops.
+- The first image loads right away with high fetch priority. The rest load lazily.
+- The first slide zooms out once on load. That's turned off for people who prefer reduced motion.
 
 ## Files
 
-| File | Purpose |
+| File | What it is |
 |---|---|
-| `hero-slider.php` | Block template (PHP/HTML) |
-| `hero-slider-fields.php` | ACF field group (slides repeater, autoplay, delay) |
+| `hero-slider.php` | Block template |
+| `hero-slider-fields.php` | ACF field group (slides, autoplay, delay) |
 | `hero-slider.scss` | Block styles |
-| `hero-slider.js` | Slider setup and video/autoplay handling |
-| `hero-slider.json` | Block metadata read by the registration code |
-| `scss/_breakpoints.scss` | Breakpoint map and `responsive()` mixin |
-| `scss/_variables.scss` | Colour tokens and font sizes |
-| `scss/_mixinsAndFunctions.scss` | `rem()`, `clamped()`, `color()` and other mixins |
-| `scss/style.scss` | Entry file so the sample compiles on its own |
+| `hero-slider.js` | Slider setup and video handling |
+| `hero-slider.json` | Block settings read by the registration code |
+| `scss/_breakpoints.scss` | Breakpoints and the `responsive()` mixin |
+| `scss/_variables.scss` | Colour tokens and font sizes (placeholder values) |
+| `scss/_mixinsAndFunctions.scss` | `rem()`, `clamped()`, `color()` and other helpers |
+| `scss/style.scss` | Entry file so the SCSS compiles on its own |
 
 ## Dependencies
 
-- **ACF Pro**: field group, `get_field()`, `acf_register_block_type()`
-- **Swiper.js**: slider engine (fade effect, pagination, navigation). Must load before `hero-slider.js`.
-- **Bootstrap utilities**: `p-0`, `m-0`, `d-none`
-- **AOS**: `data-aos` attributes on the play/pause button
-- **Icon font** (IcoMoon): `icon-pause`, `icon-play`, `icon-arrow-left`, `icon-arrow-right`. Not included.
+- **ACF Pro** for the fields and block registration
+- **Swiper.js** for the slider. Load it before `hero-slider.js`.
+- **Bootstrap** utility classes (`p-0`, `m-0`, `d-none`)
+- **AOS** for the fade-in on the play/pause button
+- **An icon font** for the arrow and play/pause icons. Not included.
 
-## What I wrote vs. libraries
+## What I wrote and what came from libraries
 
-**I wrote:**
-- the template, field group, SCSS and JS
-- the SCSS helpers (`rem`, `clamped`, `color`, `responsive`, pagination-dot hit-area mixins)
-- the logic that coordinates video playback with Swiper autoplay
-- the image `sizes`/loading strategy
+I wrote the template, the field group, the SCSS, the JavaScript and the SCSS helpers.
 
-**From libraries:**
-- Swiper provides the slide transitions, pagination dots and arrow navigation.
-- ACF provides the field UI and data access.
-- Bootstrap, AOS and IcoMoon provide utility classes, scroll animations and icons.
+Swiper handles the fade transition, the dots and the arrows. My code decides when Swiper should move. It stops autoplay for video slides, starts it again for image slides, and keeps the play/pause button in sync.
 
-## Registering the block
+ACF Pro gives the editing fields. Bootstrap and AOS add a few classes and a fade.
+
+## How to register it
 
 1. Copy the folder to `your-theme/blocks/hero-slider/`.
-2. Compile the SCSS into the theme's stylesheet.
+2. Compile the SCSS into your theme's stylesheet.
 3. Enqueue Swiper, then `hero-slider.js`.
-4. Register the block on `acf/init`:
+4. Register the block:
 
 ```php
 add_action('acf/init', function () {
@@ -69,9 +69,10 @@ add_action('acf/init', function () {
 });
 ```
 
-In the original project, a small plugin I wrote does this for every folder under `blocks/`. It also enqueues each block's JS only on pages that use the block.
+On the original project, a small plugin I wrote does this for every folder in `blocks/`. It also loads each block's JS only on pages that use the block.
 
-## Notes
+## What I'd improve
 
-- The colour token names (`primary1`, …) and font names are placeholders.
-- `sample_optimize_output()`, mentioned in a comment, is a theme-level output filter. It is not included.
+- The arrow and play/pause buttons remove their outline on `:focus-visible`. Keyboard users can't see which button is focused. I'd put a visible focus style back.
+- YouTube and Vimeo slides have no play/pause button. Only uploaded videos do.
+- The YouTube embed uses `youtube.com`. I'd switch it to `youtube-nocookie.com`.
